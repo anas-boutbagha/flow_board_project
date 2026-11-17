@@ -1,11 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+    <title >Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="js/main.js" type="module" ></script>
+    <link rel="stylesheet" href="./adding.css">
+    <link rel="stylesheet" href="style.css">
     
+</head>
+
+<body>
+    <header class="h-24 flex justify-between border-3 border-cyan-700 ">
+        <div class=" ml-2">
+            <p class=" text-[25px] text-cyan-900 font-bold mt-4">[FlowBoard]</p>
+        </div>
+        <div class="mt-1 mr-2.5">
+            <button class="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl border-cyan-700 text-cyan-500 text-[16px] font-medium h-10 w-full">AI Generation</button>
+            <fieldset class="fieldset w-full">
+                <select class="text-cyan-500 text-[16px] font-medium select select_uu border-cyan-700">
+                    <option disabled selected >choose a filter </option>
+                    <option class="text-cyan-950">priority</option>
+                    <option class="text-cyan-950">assignee</option>
+                    <option class="text-cyan-950">q</option>
+                </select>
+            </fieldset>
+        </div>
+    </header>
+    <main></main>
+    <footer></footer>
 </body>
 </html>

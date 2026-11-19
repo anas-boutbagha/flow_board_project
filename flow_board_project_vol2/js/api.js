@@ -23,6 +23,21 @@ export async function recuper(rejected, resolved, priority = "", assignee = "", 
     } catch (error) {
         rejected(error)
     }
+}
 
+export async function delet(id) {
+    const options = {
+  method: 'DELETE',
+  url: 'https://flowboard-api-virid.vercel.app/cards/'+id,
+  headers: {
+    'X-Workspace': 'public'
+  }
+}
 
+// try {
+//   const { data } = await axios.request(options)
+//   console.log(data)
+// } catch (error) {
+//   console.error(error)
+// }
 }

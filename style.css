@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default;
+}
+.boldy2{
+  font-weight: 800;
+}

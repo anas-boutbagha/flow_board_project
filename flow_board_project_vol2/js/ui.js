@@ -1,4 +1,4 @@
-import { delet } from './api.js';
+import { delet, modifier_data } from './api.js';
 export function afichage_des_cards(tab) {
     let sec01 = document.querySelector('.todo')
     let sec02 = document.querySelector('.in_progress')
@@ -16,7 +16,7 @@ export function afichage_des_cards(tab) {
 
         let dueDate = tab[i].dueDate
         if (tab[i].status == "todo") {
-            sec01.innerHTML += `<div id="ff${id}" class="w-full border-2 border-cyan-500 rounded-b-xl">
+            sec01.innerHTML += `<div id="ff${id}" class="card w-full border-2 border-cyan-500 rounded-b-xl">
                 <div class="w-full flex justify-between">
                     <p class="m-1.5">${titre}</p>
                     <img class="delete " src="./ressources/delete_img.jpg" alt="delete_img">
@@ -31,7 +31,7 @@ export function afichage_des_cards(tab) {
                         
                     </div>
                     <div class="mt-3.5 flex justify-between">
-                        <span class="priority_span p-2 pb-2.5 bg-red-800 border-2 border-cyan-700 rounded-4xl">${priority}</span><button class="modif btn btn-active btn-xs btn-success sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">modifier</button>
+                        <span class="priority_span p-2 pb-2.5 bg-red-800 border-2 border-cyan-700 rounded-4xl">${priority}</span><button class="modif btn btn-active btn-xs btn-success sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl" id="${id}">modifier</button>
                     </div>
                 </div>
             </div>`
@@ -44,7 +44,7 @@ export function afichage_des_cards(tab) {
             }
         }
         if (tab[i].status == "in-progress") {
-            sec02.innerHTML += `<div id="ff${id}" class="w-full border-2 border-cyan-500 rounded-b-xl">
+            sec02.innerHTML += `<div id="ff${id}" class="card w-full border-2 border-cyan-500 rounded-b-xl">
                 <div class="w-full flex justify-between">
                     <p class="m-1.5">${titre}</p>
                     <img class="delete " src="./ressources/delete_img.jpg" alt="delete_img">
@@ -59,7 +59,7 @@ export function afichage_des_cards(tab) {
                         
                     </div>
                     <div class="mt-3.5 flex justify-between">
-                        <span class="priority_span p-2 pb-2.5 bg-red-800 border-2 border-cyan-700 rounded-4xl">${priority}</span><button class="modif btn btn-active btn-xs btn-success sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">modifier</button>
+                        <span class="priority_span p-2 pb-2.5 bg-red-800 border-2 border-cyan-700 rounded-4xl">${priority}</span><button class="modif btn btn-active btn-xs btn-success sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl" id="${id}">modifier</button>
                     </div>
                 </div>
             </div>`
@@ -72,7 +72,7 @@ export function afichage_des_cards(tab) {
             }
         }
         if (tab[i].status == "done") {
-            sec03.innerHTML += `<div id="ff${id}" class="w-full border-2 border-cyan-500 rounded-b-xl">
+            sec03.innerHTML += `<div id="ff${id}" class="card w-full border-2 border-cyan-500 rounded-b-xl">
                 <div class="w-full flex justify-between">
                     <p class="m-1.5">${titre}</p>
                     <img class="delete " src="./ressources/delete_img.jpg" alt="delete_img">
@@ -87,7 +87,7 @@ export function afichage_des_cards(tab) {
                         
                     </div>
                     <div class="mt-3.5 flex justify-between">
-                        <span class="priority_span p-2 pb-2.5 bg-red-800 border-2 border-cyan-700 rounded-4xl">${priority}</span><button class="modif btn btn-active btn-xs btn-success sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">modifier</button>
+                        <span class="priority_span p-2 pb-2.5 bg-red-800 border-2 border-cyan-700 rounded-4xl">${priority}</span><button class="modif btn btn-active btn-xs btn-success sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl" id="${id}">modifier</button>
                     </div>
                 </div>
             </div>`
@@ -100,37 +100,169 @@ export function afichage_des_cards(tab) {
             }
         }
     }
+    console.log("wa naaary rasi tab");
+    
 }
 export function delete_btn(tab) {
     let btn_del = document.querySelectorAll('.delete')
     for (let i = 0; i < btn_del.length; i++) {
         btn_del[i].addEventListener('click', () => {
-            let id = '#ffff' + (i + 1)
-            let deleted_dev = document.querySelector(`${id}`)
-            deleted_dev.remove()
-            tab.splice(i,1)
-            delet(i)            
+            btn_del[i].parentElement.parentElement.remove();
+            delet(i)
+        })
+    }
+}
+function verification(obj) {
+    let cnt = 0
+    let title_inp = obj.titre
+    let discription_inp = obj.discription
+
+    function discription_verif(discription_inp) {
+        cnt = 0
+        const discription_regex = /^(?=[\s\S]{3,300}$)(?=[\s\S]*[A-Za-zÀ-ÖØ-öø-ÿŒœ])[A-Za-zÀ-ÖØ-öø-ÿŒœ0-9\s.,;:!?'’"«»()\-&%€\/]+$/;
+        if (!discription_inp) {
+            cnt++
+        }
+        if (!discription_regex.test(discription_inp)) {
+            cnt++
+        }
+
+    }
+    function name_verif(title_inp) {
+        cnt = 0
+        const title_regex = /^(?=.{3,50}$)[A-Za-zÀ-ÖØ-öø-ÿŒœ]+(?:[ '’\-&.][A-Za-zÀ-ÖØ-öø-ÿŒœ]+)*$/;
+        if (!title_inp) {
+            cnt++
+        }
+        if (!title_regex.test(title_inp)) {
+            cnt++
+        }
+
+    }
+    function date_verif() {
+        let date_inp = obj.dueDate
+        cnt = 0
+        function todayString() {
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+        if (!date_inp) {
+            cnt++
+        }
+        if (date_inp < todayString()) {
+            cnt++
+        }
+
+    }
+    date_verif()
+    name_verif(title_inp)
+    discription_verif(discription_inp)
+
+    return cnt
+}
+export function modifier(tab) {
+    let cards = document.querySelectorAll('.card')
+    console.log(cards);
+
+    for (let i = 0; i < cards.length; i++) {
+        let id = i + 1
+        let tab_index = id
+        let btn_modif = document.querySelector(`#ff${id}`)
+        function change_local_data(tab) {
+            console.log("waa l3adab as7aybi l3adab");
+            
+                tab[id].title = document.querySelector('#swal_titre').value.trim();
+                tab[id].assignee = document.querySelector('#swal_assignee').value;
+                tab[id].discription = document.querySelector('#swal_description').value.trim();
+                tab[id].priority = document.querySelector('#swal_priority').value.trim();
+                tab[id].tags = document.querySelector('#swal_tags').value.split(" ");
+                tab[id].dueDate = document.querySelector('#swal_date').value;
+        }
+
+        btn_modif?.addEventListener('click', () => {
+
+            let titre = tab[i].title
+            let assignee = tab[i].assignee
+            let discription = tab[i].description
+            let priority = tab[i].priority
+            let tags = tab[i].tags
+            let dueDate = tab[i].dueDate
+            let status = tab[i].status
+
+            let card_a_modifier = btn_modif.parentElement.parentElement
+
+            Swal.fire({
+                title: 'User Details',
+                html: `
+    <input type="text" id="swal_titre" class="swal2-input"  value="${titre}">
+    <input type="date" id="swal_date" class="swal2-input"  value="${dueDate}">
+    <select id="swal_assignee" class="swal2-select">
+        <option value="" disabled >-- Choose assignee --</option>
+        <option value="Thomas Leroy" ${assignee === 'Thomas Leroy' ? 'selected' : ''}>Thomas Leroy</option>
+        <option value="Amina Haddad" ${assignee === 'Amina Haddad' ? 'selected' : ''}>Amina Haddad</option>
+        <option value="Lucas Martin" ${assignee === 'Lucas Martin' ? 'selected' : ''}>Lucas Martin</option>
+        <option value="Yasmine Benali" ${assignee === 'Yasmine Benali' ? 'selected' : ''}>Yasmine Benali</option>
+    </select>
+    <input type="text" id="swal_description" class="swal2-input"  value="${discription}">
+    <input type="text" id="swal_tags" class="swal2-input"  value="${tags}">
+    <select id="swal_priority" class="swal2-select">
+        <option value="" disabled >-- Choose assignee --</option>
+        <option value="high" ${assignee === 'high' ? 'selected' : ''}>high</option>
+        <option value="medium" ${assignee === 'medium' ? 'selected' : ''}>medium</option>
+        <option value="low" ${assignee === 'low' ? 'selected' : ''}>low</option>
+    </select>             `,
+                showCancelButton: true,
+                focusConfirm: false,
+
+            })
+
+            let imputs = document.querySelectorAll('.swal2-input')
+            for (let i = 0; i < imputs.length; i++) {
+                imputs[i].addEventListener('input', (e) => {
+                    e.stopPropagation()
+                    let imputs_data = {
+                        titre: document.querySelector('#swal_titre').value,
+                        assignee: document.querySelector('#swal_assignee').value,
+                        discription: document.querySelector('#swal_description').value,
+                        priority: document.querySelector('#swal_priority').value,
+                        tags: document.querySelector('#swal_tags').value,
+                        dueDate: document.querySelector('#swal_date').value,
+                    }
+                    let imputs_data_obj = {
+                        title: document.querySelector('#swal_titre').value.trim(),
+                        assignee: document.querySelector('#swal_assignee').value,
+                        discription: document.querySelector('#swal_description').value,
+                        priority: document.querySelector('#swal_priority').value.trim(),
+                        tags: document.querySelector('#swal_tags').value.split(" "),
+                        dueDate: document.querySelector('#swal_date').value,
+                        status: status,
+                    }
+
+
+                    if (verification(imputs_data) == 0) {
+                        Swal.enableButtons()
+                        let swal_submit = document.querySelector('.swal2-confirm')
+                        swal_submit.addEventListener('click', () => {
+                            modifier_data(id, imputs_data_obj)
+                            change_local_data(tab)
+                            afichage_des_cards(tab)
+                            
+                        })
+
+                    }
+                    if (verification(imputs_data) != 0) {
+                        Swal.disableButtons()
+                    }
+
+
+                })
+
+            }
+
         })
     }
 }
 
-export function modifier(tab){
-    let btn_modif = document.querySelectorAll('.modif')
-    let modal = document.querySelector('.modal')
-    for (let i = 0; i < btn_modif.length; i++) {
-        btn_modif[i].addEventListener('click',()=>{
-        let id = '#ffff' + (i + 1) 
-          modal.innerHTML = `<div class="bg-white">
-          <div class="search_barre_div">
-            <h1 class="search_barre_h1">-----search barre------</h1>
-        </div>
-        <div class="search_bar_div">
-            <label for="search_bar">
-                <input class="s_b" type="search" name="search_bar" id="search_bar"
-                    placeholder="  search here..."></label>
-        </div>
-        </div>`
-// litterly mfhmtch 3lach katkhcha mn moraha
-        })        
-    }    
-}

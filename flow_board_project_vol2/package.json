@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/cli": "^4.3.5",
     "axios": "^1.21.1",
+    "sweetalert2": "^11.26.25",
     "tailwindcss": "^4.3.5"
   }
 }

@@ -165,34 +165,35 @@ function verification(obj) {
 }
 export function modifier(tab) {
     let cards = document.querySelectorAll('.card')
-    console.log(cards);
 
     for (let i = 0; i < cards.length; i++) {
-        let id = i + 1
-        let tab_index = id
-        let btn_modif = document.querySelector(`#ff${id}`)
-        function change_local_data(tab) {
-            console.log("waa l3adab as7aybi l3adab");
-            
-                tab[id].title = document.querySelector('#swal_titre').value.trim();
-                tab[id].assignee = document.querySelector('#swal_assignee').value;
-                tab[id].discription = document.querySelector('#swal_description').value.trim();
-                tab[id].priority = document.querySelector('#swal_priority').value.trim();
-                tab[id].tags = document.querySelector('#swal_tags').value.split(" ");
-                tab[id].dueDate = document.querySelector('#swal_date').value;
+        
+        
+        function change_local_data(tab,btn_modif) {
+            let id = btn_modif.getAttribute('id').replace(/\D/g, "")
+            console.log(id);
+                tab[id-1].title = document.querySelector('#swal_titre').value.trim();
+                tab[id-1].assignee = document.querySelector('#swal_assignee').value;
+                tab[id-1].discription = document.querySelector('#swal_description').value.trim();
+                tab[id-1].priority = document.querySelector('#swal_priority').value.trim();
+                tab[id-1].tags = document.querySelector('#swal_tags').value.split(" ");
+                tab[id-1].dueDate = document.querySelector('#swal_date').value;
+                afichage_des_cards(tab)
         }
+        let main = document.querySelector('main')
+        main.addEventListener('click', (event) => {
+             let id = i+1
+             let btn_modif = event.target.closest('.modif')
+             let tab_index = btn_modif.getAttribute('id').replace(/\D/g, "")
+        
+            let titre = tab[tab_index-1].title
+            let assignee = tab[tab_index-1].assignee
+            let discription = tab[tab_index-1].description
+            let priority = tab[tab_index-1].priority
+            let tags = tab[tab_index-1].tags
+            let dueDate = tab[tab_index-1].dueDate
+            let status = tab[tab_index-1].status
 
-        btn_modif?.addEventListener('click', () => {
-
-            let titre = tab[i].title
-            let assignee = tab[i].assignee
-            let discription = tab[i].description
-            let priority = tab[i].priority
-            let tags = tab[i].tags
-            let dueDate = tab[i].dueDate
-            let status = tab[i].status
-
-            let card_a_modifier = btn_modif.parentElement.parentElement
 
             Swal.fire({
                 title: 'User Details',
@@ -223,6 +224,7 @@ export function modifier(tab) {
             for (let i = 0; i < imputs.length; i++) {
                 imputs[i].addEventListener('input', (e) => {
                     e.stopPropagation()
+                    let id = btn_modif.getAttribute('id').replace(/\D/g, "")
                     let imputs_data = {
                         titre: document.querySelector('#swal_titre').value,
                         assignee: document.querySelector('#swal_assignee').value,
@@ -240,15 +242,15 @@ export function modifier(tab) {
                         dueDate: document.querySelector('#swal_date').value,
                         status: status,
                     }
-
+                    console.log(imputs_data_obj);
+                    
 
                     if (verification(imputs_data) == 0) {
                         Swal.enableButtons()
                         let swal_submit = document.querySelector('.swal2-confirm')
                         swal_submit.addEventListener('click', () => {
                             modifier_data(id, imputs_data_obj)
-                            change_local_data(tab)
-                            afichage_des_cards(tab)
+                            change_local_data(tab,btn_modif)
                             
                         })
 
